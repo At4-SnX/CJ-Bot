@@ -394,66 +394,57 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-  // /casier ───────────────────────────────────────────────────────────────
+ // --- 1. DÉCLARATION DES COMMANDES (En haut) ---
+const slashCommands = [
+  new SlashCommandBuilder()
+    .setName('casier')
+    .setDescription('📁 Créer un extrait de casier judiciaire B3')
+    .addStringOption(o => o.setName('nom_prenom').setDescription('Nom RP').setRequired(true))
+    .addIntegerOption(o => o.setName('age_rp').setDescription('Âge RP').setRequired(true))
+    .addStringOption(o => o.setName('faits').setDescription('Faits reprochés').setRequired(true))
+    .addStringOption(o => o.setName('type_peine').setDescription('Type de peine').setRequired(true)
+        .addChoices({ name: '💰 Amende', value: 'amende' }, { name: '🚔 GAV', value: 'gav' }, { name: '⛓️ Prison', value: 'prison' }))
+    .addAttachmentOption(o => o.setName('photo').setDescription('Photo').setRequired(true))
+    .addStringOption(o => o.setName('montant_amende').setDescription('Montant (si amende)').setRequired(false))
+    .addStringOption(o => o.setName('amende_payee').setDescription('Payée ?').setRequired(false)
+        .addChoices({ name: 'Oui', value: 'oui' }, { name: 'Non', value: 'non' }))
+    .addStringOption(o => o.setName('duree_gav').setDescription('Durée GAV').setRequired(false))
+    .addStringOption(o => o.setName('duree_prison').setDescription('Durée Prison').setRequired(false))
+].map(c => c.toJSON());
+
+// --- 2. LOGIQUE D'EXÉCUTION (Dans interactionCreate) ---
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
   if (interaction.commandName === 'casier') {
-    if (!hasGendRole(member)) return denyAccess(interaction);
     await interaction.deferReply({ ephemeral: true });
 
-    const nomPrenom    = interaction.options.getString('nom_prenom');
-    const ageRp        = interaction.options.getInteger('age_rp');
-    const faits        = interaction.options.getString('faits');
-    const typePeine    = interaction.options.getString('type_peine');
-    const amende       = interaction.options.getString('montant_amende') ?? null;
-    const amendePayee  = interaction.options.getString('amende_payee') === 'oui' ? 1 : 0;
-    const dureeGav     = interaction.options.getString('duree_gav') ?? null;
-    const dureePrison  = interaction.options.getString('duree_prison') ?? null;
-    const photo        = interaction.options.getAttachment('photo');
+    const nomPrenom = interaction.options.getString('nom_prenom');
+    const typePeine = interaction.options.getString('type_peine');
+    const amende = interaction.options.getString('montant_amende');
+    const dureeGav = interaction.options.getString('duree_gav');
+    const dureePrison = interaction.options.getString('duree_prison');
+    const photo = interaction.options.getAttachment('photo');
 
-    // Validations selon type de peine
-    if (typePeine === 'amende' && !amende) {
-      return interaction.editReply({ content: '❌ Vous devez renseigner le **montant de l\'amende** pour une peine de type Amende.' });
-    }
-    if (typePeine === 'gav' && !dureeGav) {
-      return interaction.editReply({ content: '❌ Vous devez renseigner la **durée de la GAV**.' });
-    }
-    if (typePeine === 'prison' && !dureePrison) {
-      return interaction.editReply({ content: '❌ Vous devez renseigner la **durée de la peine de prison**.' });
-    }
-    if (!photo?.contentType?.startsWith('image/')) {
-      return interaction.editReply({ content: '❌ Fichier invalide. Joignez une image JPG/PNG.' });
-    }
+    // Validation
+    if (typePeine === 'amende' && !amende) return interaction.editReply('❌ Montant de l\'amende requis.');
+    if (typePeine === 'gav' && !dureeGav) return interaction.editReply('❌ Durée GAV requise.');
+    if (typePeine === 'prison' && !dureePrison) return interaction.editReply('❌ Durée prison requise.');
 
+    // Enregistrement DB
     try {
-      const result   = stmt.insertCasier.run(
-        nomPrenom, ageRp, faits, typePeine,
-        amende, amendePayee, dureeGav, dureePrison,
-        photo.url, interaction.user.tag
+      stmt.insertCasier.run(
+        nomPrenom, interaction.options.getInteger('age_rp'), interaction.options.getString('faits'),
+        typePeine, amende, (interaction.options.getString('amende_payee') === 'oui' ? 1 : 0),
+        dureeGav, dureePrison, photo.url, interaction.user.tag
       );
-      const casierID = Number(result.lastInsertRowid);
-      const data = {
-        id: casierID, nom_prenom: nomPrenom, age_rp: ageRp,
-        faits, type_peine: typePeine,
-        amende, amende_payee: amendePayee,
-        duree_gav: dureeGav, duree_prison: dureePrison,
-        photo_url: photo.url,
-      };
-      const embed = buildEmbedCasier(data);
-
-      try {
-        const thread = await postCasierForum(interaction.guild, casierID, nomPrenom, embed);
-        await interaction.editReply({ content: `✅ Casier **#${casierID}** créé pour **${nomPrenom}** — <#${thread.id}>` });
-      } catch (forumErr) {
-        console.warn('⚠️ Fallback message classique:', forumErr.message);
-        await interaction.channel.send({ embeds: [embed] });
-        await interaction.editReply({ content: `✅ Casier **#${casierID}** créé.\n⚠️ Forum introuvable — posté en message classique.` });
-      }
+      await interaction.editReply(`✅ Casier créé pour **${nomPrenom}**.`);
     } catch (err) {
-      console.error('Erreur /casier:', err);
-      await interaction.editReply({ content: `❌ Erreur : ${err.message}` });
+      console.error(err);
+      await interaction.editReply('❌ Erreur lors de l\'enregistrement.');
     }
-    return;
   }
-
+});
   // /recherche_casier ─────────────────────────────────────────────────────
   if (interaction.commandName === 'recherche_casier') {
     if (!hasGendRole(member)) return denyAccess(interaction);
