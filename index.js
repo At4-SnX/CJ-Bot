@@ -776,8 +776,6 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-});
-
   // ───────────────────────────────────────────────────────────────────────────
   // 2. MODAL SUBMIT — Appel 112
   // ───────────────────────────────────────────────────────────────────────────
@@ -917,8 +915,6 @@ client.on('interactionCreate', async (interaction) => {
     await updateAllPanels();
     return;
   }
-
-});
 
 // ───────────────────────────────────────────────────────────────────────────
 // 4. COMMANDES SLASH
