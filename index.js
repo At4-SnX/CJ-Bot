@@ -984,4 +984,4 @@ client.once('ready', async () => {
   console.log('✅ Panels rafraîchis.');
 });
 
-
+client.login(CFG.TOKEN);
