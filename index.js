@@ -776,6 +776,7 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
+});
 
   // ───────────────────────────────────────────────────────────────────────────
   // 2. MODAL SUBMIT — Appel 112
@@ -833,6 +834,8 @@ client.on('interactionCreate', async (interaction) => {
 
     return;
   }
+
+});
 
   // ───────────────────────────────────────────────────────────────────────────
   // 3. BOUTONS — Panel de service
