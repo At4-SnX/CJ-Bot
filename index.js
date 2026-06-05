@@ -1,3 +1,6 @@
+console.log("Starfallah sa démarre ta grand mère !");
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  BOT DISCORD — Administration Générale de la Gendarmerie
 //  v4.0 — Panel Service + Casiers B3 + Appels d'urgence 112
