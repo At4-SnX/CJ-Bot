@@ -1,3 +1,17 @@
+client.on('interactionCreate', async (interaction) => {
+
+    if (!interaction.isChatInputCommand()) return;
+
+
+
+    // Fais le defer AVANT de chercher le membre ou de faire des calculs
+
+    await interaction.deferReply({ ephemeral: true });
+
+
+
+    const member = await getMember(interaction.guild, interaction.user.id);
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  BOT DISCORD — Administration Générale de la Gendarmerie
 //  v4.0 — Panel Service (Prise/Pause/Fin) + Casiers B3 + Appels d'urgence !112
