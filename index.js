@@ -46,7 +46,7 @@ if (!CFG.TOKEN)     { console.error('❌ DISCORD_TOKEN manquant'); process.exit(
 if (!CFG.CLIENT_ID) { console.error('❌ CLIENT_ID manquant');     process.exit(1); }
 
 // ─── BASE DE DONNÉES ─────────────────────────────────────────────────────────
-const db = new Database('./bot_data.db');
+const db = new Database('/tmp/bot_data.db');
 db.pragma('journal_mode = WAL');
 
 db.exec(`
