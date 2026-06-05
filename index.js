@@ -977,3 +977,4 @@ client.once('ready', async () => {
   console.log('✅ Panels rafraîchis.');
 });
 
+
