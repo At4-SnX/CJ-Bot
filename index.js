@@ -1,4 +1,4 @@
-console.log("Starfallah sa démarre ta grand mère !");
+console.log("Le bot démarre bien!");
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
