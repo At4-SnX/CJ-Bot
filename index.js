@@ -978,8 +978,8 @@ client.once('ready', async () => {
     type: ActivityType.Watching
   });
 
-  await registerCommands();
-  await updateAllPanels();
+  registerCommands().catch(console.error);
+  updateAllPanels().catch(console.error);
 
   console.log('✅ Panels rafraîchis.');
 });
