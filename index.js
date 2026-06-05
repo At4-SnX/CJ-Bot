@@ -1,5 +1,8 @@
 console.log("Le bot démarre bien!");
 
+client.on('debug', console.log);
+client.on('warn', console.log);
+client.on('error', console.log);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  BOT DISCORD — Administration Générale de la Gendarmerie
