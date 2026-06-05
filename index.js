@@ -919,56 +919,53 @@ client.on('interactionCreate', async (interaction) => {
   }
 
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // 4. COMMANDES SLASH
-  // ───────────────────────────────────────────────────────────────────────────
-  if (interaction.isChatInputCommand()) {
+// ───────────────────────────────────────────────────────────────────────────
+// 4. COMMANDES SLASH
+// ───────────────────────────────────────────────────────────────────────────
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-    await interaction.deferReply({ ephemeral: true });
-    const member = await getMember(interaction.guild, interaction.user.id);
+  await interaction.deferReply({ ephemeral: true });
 
-    // /panel_service
-    if (interaction.commandName === 'panel_service') {
-      if (!hasRole(member)) return denyAccess(interaction);
+  const member = await getMember(interaction.guild, interaction.user.id);
 
-      const msg = await interaction.channel.send({
-        embeds: [buildPanelServiceEmbed()],
-        components: [buildPanelServiceRow()]
-      });
+  // /panel_service
+  if (interaction.commandName === 'panel_service') {
+    if (!hasRole(member)) return denyAccess(interaction);
 
-      db_stmt.insertPanel.run(msg.id, msg.channel.id);
+    const msg = await interaction.channel.send({
+      embeds: [buildPanelServiceEmbed()],
+      components: [buildPanelServiceRow()]
+    });
 
-      return interaction.editReply({ content: '✅ Panel de service posté.' });
-    }
+    db_stmt.insertPanel.run(msg.id, msg.channel.id);
 
-    // /112
-    if (interaction.commandName === '112') {
-      await interaction.channel.send({
-        embeds: [build112Embed()],
-        components: [build112SelectRow()]
-      });
+    return interaction.editReply({ content: '✅ Panel de service posté.' });
+  }
 
-      return interaction.editReply({ content: '🚨 Panel d’urgence posté.' });
-    }
+  // /112
+  if (interaction.commandName === '112') {
+    await interaction.channel.send({
+      embeds: [build112Embed()],
+      components: [build112SelectRow()]
+    });
 
-    // /casier
-    if (interaction.commandName === 'casier') {
-      // (Ton code casier collé ici)
-      // ✔️ Je l’ai déjà intégré dans ton bloc précédent
-      return;
-    }
+    return interaction.editReply({ content: '🚨 Panel d’urgence posté.' });
+  }
 
-    // /recherche_casier
-    if (interaction.commandName === 'recherche_casier') {
-      // ✔️ Déjà intégré
-      return;
-    }
+  // /casier
+  if (interaction.commandName === 'casier') {
+    return interaction.editReply("Commande casier OK (placeholder).");
+  }
 
-    // /liste_casiers
-    if (interaction.commandName === 'liste_casiers') {
-      // ✔️ Déjà intégré
-      return;
-    }
+  // /recherche_casier
+  if (interaction.commandName === 'recherche_casier') {
+    return interaction.editReply("Recherche casier OK (placeholder).");
+  }
+
+  // /liste_casiers
+  if (interaction.commandName === 'liste_casiers') {
+    return interaction.editReply("Liste casiers OK (placeholder).");
   }
 });
 
