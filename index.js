@@ -964,7 +964,7 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 // ─── READY ────────────────────────────────────────────────────────────────────
-client.once('clientReady', async () => {
+client.once('ready', async () => {
   console.log(`✅ Connecté : ${client.user.tag}`);
 
   client.user.setActivity('Gendarmerie Nationale', {
