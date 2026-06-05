@@ -21,6 +21,7 @@ const {
   TextInputStyle,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
+  ActivityType,
 } = require('discord.js');
 
 const Database = require('better-sqlite3');
@@ -963,15 +964,16 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 // ─── READY ────────────────────────────────────────────────────────────────────
-client.once('ready', async () => {
+client.once('clientReady', async () => {
   console.log(`✅ Connecté : ${client.user.tag}`);
-  client.user.setActivity('Gendarmerie Nationale', { type: ActivityType.Watching });
+
+  client.user.setActivity('Gendarmerie Nationale', {
+    type: ActivityType.Watching
+  });
+
   await registerCommands();
   await updateAllPanels();
+
   console.log('✅ Panels rafraîchis.');
 });
 
-client.login(CFG.TOKEN).catch(err => {
-  console.error('❌ Connexion échouée:', err.message);
-  process.exit(1);
-});
