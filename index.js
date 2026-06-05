@@ -704,6 +704,7 @@ client.on('interactionCreate', async (interaction) => {
     });
     return;
   }
+} });
 
 // ─── READY ────────────────────────────────────────────────────────────────────
 client.once('ready', async () => {
