@@ -428,13 +428,6 @@ client.on('messageCreate', async (message) => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-    console.log(`DEBUG: Interaction reçue de ${interaction.user.tag}`);
-
-    if (interaction.isChatInputCommand()) {
-        await interaction.reply({ content: '✅ Le bot répond bien !', ephemeral: true });
-        console.log('DEBUG: Réponse envoyée avec succès.');
-    }
-});
 
   // ══════════════════════════════════════════════════════════════════════════
   //  SELECT MENU — Choix du type de délit (appel 112)
