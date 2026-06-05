@@ -1,4 +1,3 @@
-
 // ═══════════════════════════════════════════════════════════════════════════════
 //  BOT DISCORD — Administration Générale de la Gendarmerie
 //  v4.0 — Panel Service + Casiers B3 + Appels d'urgence 112
@@ -658,7 +657,6 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-
   // ───────────────────────────────────────────────────────────────────────────
   // 4. COMMANDES SLASH
   // ───────────────────────────────────────────────────────────────────────────
@@ -681,35 +679,39 @@ client.on('interactionCreate', async (interaction) => {
       return interaction.editReply({ content: '✅ Panel de service posté.' });
     }
 
-    // /112
-    if (interaction.commandName === '112') {
-      await interaction.channel.send({
-        embeds: [build112Embed()],
-        components: [build112SelectRow()]
-      });
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-      return interaction.editReply({ content: '🚨 Panel d’urgence posté.' });
-    }
+  // Toujours defer pour éviter "réfléchit..."
+  await interaction.deferReply({ ephemeral: true });
 
-    // /casier
-    if (interaction.commandName === 'casier') {
-      // (Ton code casier sera collé ici)
-      return;
-    }
+  // /112
+  if (interaction.commandName === '112') {
+    await interaction.channel.send({
+      embeds: [build112Embed()],
+      components: [build112SelectRow()]
+    });
 
-    // /recherche_casier
-    if (interaction.commandName === 'recherche_casier') {
-      // (Ton code recherche casier sera collé ici)
-      return;
-    }
+    return interaction.editReply({ content: '🚨 Panel d’urgence posté.' });
+  }
 
-    // /liste_casiers
-    if (interaction.commandName === 'liste_casiers') {
-      // (Ton code liste casiers sera collé ici)
-      return;
-    }
+  // /casier
+  if (interaction.commandName === 'casier') {
+    return interaction.editReply("Commande casier OK (placeholder).");
+  }
+
+  // /recherche_casier
+  if (interaction.commandName === 'recherche_casier') {
+    return interaction.editReply("Recherche casier OK (placeholder).");
+  }
+
+  // /liste_casiers
+  if (interaction.commandName === 'liste_casiers') {
+    return interaction.editReply("Liste casiers OK (placeholder).");
   }
 });
+
+
 
   // ─── EVENTS ──────────────────────────────────────────────────────────────────
 
