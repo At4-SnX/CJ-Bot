@@ -978,6 +978,7 @@ client.once('ready', async () => {
   updateAllPanels().catch(console.error);
 
   console.log('✅ Panels rafraîchis.');
-});
+
 
 client.login(CFG.TOKEN);
+});
