@@ -594,7 +594,7 @@ client.on('interactionCreate', async (interaction) => {
 // ─── READY ────────────────────────────────────────────────────────────────────
 client.once('ready', async () => {
   console.log(`✅ Connecté : ${client.user.tag}`);
-  client.user.setActivity('Gendarmerie Nationale', { type: ActivityType.Watching });
+  client.user.setActivity('〃Gendarmerie EHRP - IS', { type: ActivityType.Watching });
   await registerCommands();
 });
 
